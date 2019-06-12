@@ -15,7 +15,8 @@ using namespace std;
 #define _hw_test 4.0
 #define _conf_test 0.95
 
-#define _error_max 0.01
+// 0.00000001% de erro
+#define _error_max 0.0000000001
 
 class Test {
 private:

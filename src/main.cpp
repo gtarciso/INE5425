@@ -24,18 +24,6 @@ int main() {
 
 	double halfwidth = stat->halfWidthConfidenceInterval(0.95);
 
-/*
-	cout << "N: " << stat->numElements() << endl;
-	cout << "Média: " << stat->average() << endl;
-	cout << "Variancia: " << stat->variance() << endl;
-	cout << "Desvio padrão: " << stat->stddeviation() << endl;
-	cout << "Max: " << stat->max() << endl;
-	cout << "Min: " << stat->min() << endl;
-	cout << "Coeficiente de variação: " << stat->variationCoef() << endl;
-	cout << "Intervalo de confiança: " << stat->halfWidthConfidenceInterval(0.95) << endl;
-	cout << "Tamanho da amostra: " << stat->newSampleSize(0.95, 4) << endl; // testando com o dobro do intervalo de confiança
-
-*/
 	return 0;
 
 }
