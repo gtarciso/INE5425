@@ -117,8 +117,7 @@ double Statistic::variationCoef() {
 double Statistic::halfWidthConfidenceInterval(double confidencelevel) {
 
 	double x = (1.0-confidencelevel)/2.0;
-
-	double zstar = calculateZ(x);
+	double zstar = calculateZ(1 - x);
 
 	return (zstar * this->_stddev)/sqrt((double)this->_n);
 
@@ -136,112 +135,117 @@ unsigned int Statistic::newSampleSize(double confidencelevel, double halfWidth) 
 }
 
 // Algorithm AS 241
-// used the inverse erf method from https://gist.github.com/lakshayg/d80172fe5ae3c5d2c2aedb53c250320e
+// used the inverse erf method from http://www.bgx.org.uk/software/bgx/src/qnorm.c
 // following http://csg.sph.umich.edu/abecasis/gas_power_calculator/algorithm-as-241-the-percentage-points-of-the-normal-distribution.pdf
-double Statistic::erf_inv(double x) {
-	if (x < -1 || x > 1) {
-		return std::numeric_limits<double>::quiet_NaN();
-	} else if (x == 1.0) {
-		return std::numeric_limits<double>::infinity();
-	} else if (x == -1.0) {
-		return -std::numeric_limits<double>::infinity();
-	}
+double Statistic::erf_inv(double p) {
+	
+	const double split1=0.425;
+    const double split2=5;
+    const double const1=0.180625;
+    const double const2=1.6;
 
-	const double LN2 = 6.931471805599453094172321214581e-1;
+    double q = p-0.5;
+    double r;
+    
+    if(p==0){ 
+    	return -HUGE_VAL; 
+    }
+    if(p==1){ 
+    	return HUGE_VAL; 
+    }
 
-	double abs_x = abs(x);
+    if(fabs(q)<=split1){
+		r=const1-q*q;
+		const double A0 = 3.3871328727963666080E0;
+	    const double A1 = 1.3314166789178437745E2;
+	    const double A2 = 1.9715909503065514427E3;
+	    const double A3 = 1.3731693765509461125E4;
+	    const double A4 = 4.5921953931549871457E4;
+	    const double A5 = 6.7265770927008700853E4;
+	    const double A6 = 3.3430575583588128105E4;
+	    const double A7 = 2.5090809287301226727E3;
 
-	if (abs_x <= 0.85) {
+	    const double B1 = 4.2313330701600911252E1;
+	    const double B2 = 6.8718700749205790830E2;
+	    const double B3 = 5.3941960214247511077E3;
+	    const double B4 = 2.1213794301586595867E4;
+	    const double B5 = 3.9307895800092710610E4;
+	    const double B6 = 2.8729085735721942674E4;
+	    const double B7 = 5.2264952788528545610E3;
+		return q*( (((((((A7*r+A6)*r+A5)*r+A4)*r+A3)*r+A2)*r+A1)*r+A0) / 
+		   (((((((B7*r+B6)*r+B5)*r+B4)*r+B3)*r+B2)*r+B1)*r+1) );
+    }
 
-		const double A0 = 1.1975323115670912564578e0;
-		const double A1 = 4.7072688112383978012285e1;
-		const double A2 = 6.9706266534389598238465e2;
-		const double A3 = 4.8548868893843886794648e3;
-		const double A4 = 1.6235862515167575384252e4;
-		const double A5 = 2.3782041382114385731252e4;
-		const double A6 = 1.1819493347062294404278e4;
-		const double A7 = 8.8709406962545514830200e2;
+    if(q<0)
+		r=p;
+    else
+		r=1-p;
 
-		const double B0 = 1.0000000000000000000e0;
-		const double B1 = 4.2313330701600911252e1;
-		const double B2 = 6.8718700749205790830e2;
-		const double B3 = 5.3941960214247511077e3;
-		const double B4 = 2.1213794301586595867e4;
-		const double B5 = 3.9307895800092710610e4;
-		const double B6 = 2.8729085735721942674e4;
-		const double B7 = 5.2264952788528545610e3;
+    if(r<=0)
+		return NAN; // ERROR!!
+    	r=sqrt(-log(r));
 
-		double r =  0.180625 - 0.25 * x * x;
-		double num = (((((((A7 * r + A6) * r + A5) * r + A4) * r + A3) * r + A2) * r + A1) * r + A0);
-		double den = (((((((B7 * r + B6) * r + B5) * r + B4) * r + B3) * r + B2) * r + B1) * r + B0);
-		return x * num / den; 
-	}
+    if(r<=split2){
+		r-=const2;
+		const double C0 = 1.42343711074968357734E0;
+	    const double C1 = 4.63033784615654529590E0;
+	    const double C2 = 5.76949722146069140550E0;
+	    const double C3 = 3.64784832476320460504E0;
+	    const double C4 = 1.27045825245236838258E0;
+	    const double C5 = 2.41780725177450611770E-1;
+	    const double C6 = 2.27238449892691845833E-2;
+	    const double C7 = 7.74545014278341407640E-4;
 
-	double r = sqrt(LN2 - log(1.0 - abs_x));
+	    const double D1 = 2.05319162663775882187E0;
+	    const double D2 = 1.67638483018380384940E0;
+	    const double D3 = 6.89767334985100004550E-1;
+	    const double D4 = 1.48103976427480074590E-1;
+	    const double D5 = 1.51986665636164571966E-2;
+	    const double D6 = 5.47593808499534494600E-4;
+	    const double D7 = 1.05075007164441684324E-9;
 
-	double num, den;
-	if (r <= 5.0) {
+		if(q<0) 
+			return - (((((((C7*r+C6)*r+C5)*r+C4)*r+C3)*r+C2)*r+C1)*r+C0) /
+			    (((((((D7*r+D6)*r+D5)*r+D4)*r+D3)*r+D2)*r+D1)*r+1);
+		else{
 
-		const double C0 = 1.42343711074968357734e0;
-		const double C1 = 4.63033784615654529590e0;
-		const double C2 = 5.76949722146069140550e0;
-		const double C3 = 3.64784832476320460504e0;
-		const double C4 = 1.27045825245236838258e0;
-		const double C5 = 2.41780725177450611770e-1;
-		const double C6 = 2.27238449892691845833e-2;
-		const double C7 = 7.74545014278341407640e-4;
+			return (((((((C7*r+C6)*r+C5)*r+C4)*r+C3)*r+C2)*r+C1)*r+C0) / 
+			 (((((((D7*r+D6)*r+D5)*r+D4)*r+D3)*r+D2)*r+D1)*r+1);
+		}
+    }
 
-		const double D0 = 1.4142135623730950488016887e0;
-		const double D1 = 2.9036514445419946173133295e0;
-		const double D2 = 2.3707661626024532365971225e0;
-		const double D3 = 9.7547832001787427186894837e-1;
-		const double D4 = 2.0945065210512749128288442e-1;
-		const double D5 = 2.1494160384252876777097297e-2;
-		const double D6 = 7.7441459065157709165577218e-4;
-		const double D7 = 1.4859850019840355905497876e-9;
+    r-=split2;
+    const double E0 = 6.65790464350110377720E0;
+    const double E1 = 5.46378491116411436990E0;
+    const double E2 = 1.78482653991729133580E0;
+    const double E3 = 2.96560571828504891230E-1;
+    const double E4 = 2.65321895265761230930E-2;
+    const double E5 = 1.24266094738807843860E-3;
+    const double E6 = 2.71155556874348787815E-4;
+    const double E7 = 2.01033439929228813265E-7;
 
-		r = r - 1.6;
-		num = (((((((C7 * r + C6) * r + C5) * r + C4) * r + C3) * r + C2) * r + C1) * r + C0);
-		den = (((((((D7 * r + D6) * r + D5) * r + D4) * r + D3) * r + D2) * r + D1) * r + D0);
+    const double F1 = 5.99832206555887937690E-1;
+    const double F2 = 1.36929880922735805310E-1;
+    const double F3 = 1.48753612908506148525E-2;
+    const double F4 = 7.86869131145613259100E-4;
+    const double F5 = 1.84631831751005468180E-5;
+    const double F6 = 1.42151175831644588870E-7;
+    const double F7 = 2.04426310338993978564E-15;
 
-	} else {
+    if(q<0) 
+    	return - (((((((E7*r+E6)*r+E5)*r+E4)*r+E3)*r+E2)*r+E1)*r+E0) /
+			(((((((F7*r+F6)*r+F5)*r+F4)*r+F3)*r+F2)*r+F1)*r+1);
+    else 
+    	return (((((((E7*r+E6)*r+E5)*r+E4)*r+E3)*r+E2)*r+E1)*r+E0) / 
+	     	(((((((F7*r+F6)*r+F5)*r+F4)*r+F3)*r+F2)*r+F1)*r+1);
 
-		const double E0 = 6.65790464350110377720e0;
-		const double E1 = 5.46378491116411436990e0;
-		const double E2 = 1.78482653991729133580e0;
-		const double E3 = 2.96560571828504891230e-1;
-		const double E4 = 2.65321895265761230930e-2;
-		const double E5 = 1.24266094738807843860e-3;
-		const double E6 = 2.71155556874348757815e-5;
-		const double E7 = 2.01033439929228813265e-7;
-
-		const double F0 = 1.414213562373095048801689e0;
-		const double F1 = 8.482908416595164588112026e-1;
-		const double F2 = 1.936480946950659106176712e-1;
-		const double F3 = 2.103693768272068968719679e-2;
-		const double F4 = 1.112800997078859844711555e-3;
-		const double F5 = 2.611088405080593625138020e-5;
-		const double F6 = 2.010321207683943062279931e-7;
-		const double F7 = 2.891024605872965461538222e-15;
-		r = r - 5.0;
-		num = (((((((E7 * r + E6) * r + E5) * r + E4) * r + E3) * r + E2) * r + E1) * r + E0);
-		den = (((((((F7 * r + F6) * r + F5) * r + F4) * r + F3) * r + F2) * r + F1) * r + F0);
-
-
-	}
-
-	if (x < 0) {
-		return -num / den;
-	} else {
-		return num / den;
-	}
 }
 
 // based on https://en.wikipedia.org/wiki/Normal_distribution#Quantile_function
 // probit function | probit(p) = sqrt(2)erf⁻¹(2p-1)
 double Statistic::calculateZ(double confidencelevel) {
 
-	double zstar = erf_inv(confidencelevel*2.0-1)*sqrt(2.0);
+	double zstar = erf_inv(confidencelevel);
 	if(zstar < 0) {
 		return -1*zstar;
 	} else {
