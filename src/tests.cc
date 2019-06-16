@@ -33,7 +33,8 @@ int Test::testNumElements(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "N: " << this->_stat->numElements() << endl;
+		cout << "Should be: " << _n_e << "\n" << endl;
 		return 0;
 	}
 
@@ -46,7 +47,8 @@ int Test::testMin(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "Min: " << this->_stat->min() << endl;
+		cout << "Should be: " << _min_e << "\n" << endl;
 		return 0;
 	}
 
@@ -59,7 +61,8 @@ int Test::testMax(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "Max: " << this->_stat->max() << endl;
+		cout << "Should be: " << _max_e << "\n" << endl;
 		return 0;
 	}
 
@@ -75,7 +78,8 @@ int Test::testAverage(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "Mean: " << this->_stat->average() << endl;
+		cout << "Should be: " << _avg_e << "\n" << endl;
 		return 0;
 	}
 
@@ -90,7 +94,8 @@ int Test::testVariance(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "Variance: " << this->_stat->variance() << endl;
+		cout << "Should be: " << _var_e << "\n" << endl;
 		return 0;
 	}
 
@@ -105,7 +110,8 @@ int Test::testStdVar(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "Standard deviation: " << this->_stat->stddeviation() << endl;
+		cout << "Should be: " << _std_var_e << "\n" << endl;
 		return 0;
 	}
 
@@ -120,7 +126,8 @@ int Test::testVarcoef(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "Coefficient of variation: " << this->_stat->variationCoef() << endl;
+		cout << "Should be: " << _var_coef_e << "\n" << endl;
 		return 0;
 	}
 
@@ -136,7 +143,8 @@ int Test::testHalfWidthConfInterval(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "Half width interval: " << this->_stat->halfWidthConfidenceInterval(_conf_test) << endl;
+		cout << "Should be: " << _hf_wid_e << "\n" << endl;
 		return 0;
 	}
 
@@ -151,7 +159,8 @@ int Test::testNewSampleSize(){
 		cout << "Passed\n" << endl;
 		return 1;
 	} else {
-		cout << "Failed\n" << endl;
+		cout << "Failed\n" << "New sample size: " << this->_stat->newSampleSize(_conf_test, _hw_test) << endl;
+		cout << "Should be: " << _samp_size_e << "\n" << endl;
 		return 0;
 	}
 

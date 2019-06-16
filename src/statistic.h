@@ -6,10 +6,11 @@ class Statistic {
 private:
 	unsigned int _n;
 	double _avg;
+	long double _avg_sum;
 	double _min;
 	double _max;
 	double _variance;
-	double _variance_sum;
+	long double _variance_sum;
 	double _stddev;
 
 public:

@@ -15,8 +15,9 @@ Statistic::Statistic() {
 
 	this->_n = 0;
 	this->_avg = 0.0;
-	this->_min = 0.0;
-	this->_max = 0.0;
+	this->_avg_sum = 0.0;
+	this->_min = numeric_limits<double>::max();
+	this->_max = numeric_limits<double>::min();
 	this->_variance = 0.0;
 	this->_stddev = 0.0;
 
@@ -29,31 +30,38 @@ Statistic::Statistic() {
 // Insert a new data and calculate the statistics
 void Statistic::addValue(double value) {
 
-	// the code below iniciate the min and max value
-	// or in case they already are iniciated, then verify if the add value is a min or a max value
-	if(this->_n == 0) {
+	
+	if(value < this->_min) {
 		this->_min = value;
-		this->_max = value;
-	} else {
-		if(value < this->_min) {
-			this->_min = value;
-		}
-		if(value > this->_max) {
-			this->_max = value;
-		}
 	}
+	if(value > this->_max) {
+		this->_max = value;
+	}
+	
 
 	this->_n++;
 
 	// The following lines calculate the incremental mean and variance
 	// according to: http://datagenetics.com/blog/november22017/index.html
-
+	/*
 	double oldavg = this->_avg;
 	this->_avg = (this->_avg + (value - this->_avg)/this->_n); // incremental calculation of mean
 
 	this->_variance_sum = (this->_variance_sum + (value - oldavg)*(value - this->_avg)); // 
 	this->_variance = this->_variance_sum/(this->_n-1);
+	*/
+
+	this->_avg_sum += value;
+	this->_avg = (double)(this->_avg_sum/this->_n);
+	this->_variance_sum += (value*value);
+
+
+	// variance = [sum(xi²) - sum(xi)²/n]/n-1
+	// https://math.stackexchange.com/questions/102006/is-it-possible-to-compute-the-variance-without-computing-the-mean-first
+	this->_variance = (double)(((this->_variance_sum) - (pow((double)this->_avg_sum, 2.0)/this->_n))/(this->_n-1));
 	this->_stddev = sqrt(this->_variance);
+
+
 
 }
 
@@ -62,8 +70,9 @@ void Statistic::clear() {
 
 	this->_n = 0;
 	this->_avg = 0.0;
-	this->_min = 0.0;
-	this->_max = 0.0;
+	this->_avg_sum = 0.0;
+	this->_min = numeric_limits<double>::max();
+	this->_max = numeric_limits<double>::min();
 	this->_variance = 0.0;
 	this->_stddev = 0.0;
 	this->_variance_sum = 0.0;
