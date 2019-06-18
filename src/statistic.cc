@@ -127,7 +127,7 @@ double Statistic::variationCoef() {
 double Statistic::halfWidthConfidenceInterval(double confidencelevel) {
 
 	double x = (1.0-confidencelevel)/2.0;
-	double zstar = calculateZ(x);
+	double zstar = calculateZ(1 - x);
 
 	return (zstar * this->_stddev)/sqrt((double)this->_n);
 
@@ -136,7 +136,7 @@ double Statistic::halfWidthConfidenceInterval(double confidencelevel) {
 unsigned int Statistic::newSampleSize(double confidencelevel, double halfWidth) {
 	
 	double x = (1.0-confidencelevel)/2.0;
-	double zstar = calculateZ(1- x);
+	double zstar = calculateZ(1 - x);
 	double n_size = 0;
 	n_size = (zstar*this->_stddev/halfWidth)*(zstar*this->_stddev/halfWidth);
 	return ((unsigned int) n_size) +  1;
