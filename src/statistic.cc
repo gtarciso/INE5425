@@ -58,6 +58,7 @@ void Statistic::addValue(double value) {
 
 	// variance = [sum(xi²) - sum(xi)²/n]/n-1
 	// https://math.stackexchange.com/questions/102006/is-it-possible-to-compute-the-variance-without-computing-the-mean-first
+	// https://www.thoughtco.com/sum-of-squares-formula-shortcut-3126266
 	this->_variance = (double)(((this->_variance_sum) - (pow((double)this->_avg_sum, 2.0)/this->_n))/(this->_n-1));
 	this->_stddev = sqrt(this->_variance);
 
@@ -126,7 +127,7 @@ double Statistic::variationCoef() {
 double Statistic::halfWidthConfidenceInterval(double confidencelevel) {
 
 	double x = (1.0-confidencelevel)/2.0;
-	double zstar = calculateZ(1 - x);
+	double zstar = calculateZ(x);
 
 	return (zstar * this->_stddev)/sqrt((double)this->_n);
 
@@ -135,8 +136,7 @@ double Statistic::halfWidthConfidenceInterval(double confidencelevel) {
 unsigned int Statistic::newSampleSize(double confidencelevel, double halfWidth) {
 	
 	double x = (1.0-confidencelevel)/2.0;
-
-	double zstar = calculateZ(x);
+	double zstar = calculateZ(1- x);
 	double n_size = 0;
 	n_size = (zstar*this->_stddev/halfWidth)*(zstar*this->_stddev/halfWidth);
 	return ((unsigned int) n_size) +  1;

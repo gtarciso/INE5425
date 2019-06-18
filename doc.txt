@@ -1,0 +1,67 @@
+
+
+Documentation for X3
+
+void Statistic::addValue(double value)
+	Inserts a new data and calculate the statistics
+
+void Statistic::clear()
+	Clear all statistics data
+
+unsigned int Statistic::numElements()
+	Returns the number of data inputed
+
+double Statistic::min()
+	Returns the minimum value added until that time
+
+double Statistic::max()
+	Returns the maximum value added until that time
+
+double Statistic::average()
+	Returns the average value added until that time
+
+double Statistic::variance()
+	Returns the variance of the inputed data
+
+double Statistic::stddeviation() 
+	Returns the standard deviation of the inputed data
+
+double Statistic::variationCoef()
+	Returns the variation coefficient of the inputed data
+	Thats is the standard deviation divided by the average value
+
+double Statistic::halfWidthConfidenceInterval(double confidencelevel)
+	Given the confidence level desired, in a range from 0 < x < 1,
+	returns the half width confidence interval
+
+unsigned int Statistic::newSampleSize(double confidencelevel, double halfWidth)
+	Given the confidence level, in a range from 0 < x < 1, and the half width of 
+	the confidence interval desired, returns the an n, that would satisface the half 
+	width of the confidence interval with the given standard deviation.
+
+double Statistic::erf_inv(double p) 
+	
+
+double Statistic::calculateZ(double confidencelevel)
+	Returns the positive value of Z, given the confidence level desired, from a range of
+	0 < x < 1.
+
+Calculation of the Statistics
+
+Average:
+	The average is calculated by using a variable called avg_sum, which stores the sum of all the inputs, and is divided by number of inputs.
+
+Variance: 
+	The variance is calculate by storing the sum of the square from every inputed data,
+	then the variance is calculated by the formula [sum(xi²) - sum(xi)²/n]/n-1.
+
+By storing the sum of the inputed data and the sum of the squares we are able to reduce
+the error, because the accuracy is not lost through the varius divisions that would happen once a new data is inputed. 
+By storing the sum, the mean only needs 3 operations to be updated, increments the n, adds the value to the sum, and then divides the sum by the new n. This way no error is propagated by the previuous means. 
+
+Following this way, the calculation of the variance also uses the sums to avoid error.
+The formula is a derivation from the original sample variance formula, thes steps can be seen on https://www.thoughtco.com/sum-of-squares-formula-shortcut-3126266.
+
+
+
+
