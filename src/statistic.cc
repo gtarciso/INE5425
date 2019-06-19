@@ -1,3 +1,8 @@
+/*
+ * @Author : Alexandre Behling        - 13200626
+ * @Author : Gustavo Tarciso da Silva - 14100833
+ */
+
 #include "statistic.h"
 #include <iostream>
 #include <iterator>
@@ -137,14 +142,12 @@ unsigned int Statistic::newSampleSize(double confidencelevel, double halfWidth) 
 	
 	double x = (1.0-confidencelevel)/2.0;
 	double zstar = calculateZ(1 - x);
-	double n_size = 0;
-	n_size = (zstar*this->_stddev/halfWidth)*(zstar*this->_stddev/halfWidth);
+	double n_size = n_size = (zstar*this->_stddev/halfWidth)*(zstar*this->_stddev/halfWidth);
 	return ((unsigned int) n_size) +  1;
 
 }
 
 // Algorithm AS 241
-// used the inverse erf method from http://www.bgx.org.uk/software/bgx/src/qnorm.c
 // following http://csg.sph.umich.edu/abecasis/gas_power_calculator/algorithm-as-241-the-percentage-points-of-the-normal-distribution.pdf
 double Statistic::erf_inv(double p) {
 	

@@ -1,4 +1,8 @@
-//#include "statistic.h"
+/*
+ * @Author : Alexandre Behling        - 13200626
+ * @Author : Gustavo Tarciso da Silva - 14100833
+ */
+
 #include "tests.h"
 #include <iostream>
 #include <stdio.h>
@@ -9,10 +13,10 @@ int main() {
 	Statistic *stat = new Statistic();
 	int n;
 	double x;
-	cout << "Insira a quantidade de dados" << endl;
+	cout << "Insert data amount" << endl;
 	cin >> n;
 	for(int i = 0; i < n; i++) {
-		cout << "Insira um novo dado" << endl;
+		cout << "Insert new data" << endl;
 		cin >> x;
 		stat->addValue(x);
 	}

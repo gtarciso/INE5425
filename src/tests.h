@@ -1,3 +1,8 @@
+/*
+ * @Author : Alexandre Behling        - 13200626
+ * @Author : Gustavo Tarciso da Silva - 14100833
+ */
+
 #include "statistic.h"
 
 using namespace std;
