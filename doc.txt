@@ -51,22 +51,40 @@ double Statistic::calculateZ(double confidencelevel)
 Calculation of the Statistics
 
 Average:
-	The average is calculated by using a variable called avg_sum, which stores the sum of all the inputs, and is divided by number of inputs.
+	The average is calculated by using a variable called avg_sum, which stores the sum of
+	 all the inputs, and is divided by number of inputs.
 
 Variance: 
 	The variance is calculate by storing the sum of the square from every inputed data,
 	then the variance is calculated by the formula [sum(xi²) - sum(xi)²/n]/n-1.
 
-We are storing the sum of the input data and the sum of the squares of this data in long double variables called _avg_sum and _variance_sum, then we use this values to get the mean and variance dividing those values by n, as the formulas in reference[1], and this allow us avoid such problems as overflow and error propagation. In our case, we could use the formula final form, allowing us to avoid overflow without use long doubles, but it causes much error propagation, being impracticable. The error propagation in this second scenario would occur due to many divisions instead of only one, and then causing a lot number roundings.
+We are storing the sum of the input data and the sum of the squares of this data in long 
+double variables called _avg_sum and _variance_sum, then we use this values to get the mean
+and variance dividing those values by n, as the formulas in reference[1], and this allow us
+avoid such problems as overflow and error propagation. In our case, we could use the 
+formula final form, allowing us to avoid overflow without use long doubles, but it causes
+much error propagation, being impracticable. The error propagation in this second scenario
+would occur due to many divisions instead of only one, and then causing a lot number 
+roundings.
 
-By storing the sum, the mean only needs 3 operations to be updated, increments the n, adds the value to the sum, and then divides the sum by the new n. This way no error is propagated by the previous means. 
+By storing the sum, the mean only needs 3 operations to be updated, increments the n, adds 
+the value to the sum, and then divides the sum by the new n. This way no error is propagated 
+by the previous means. 
 
 Following this way, the calculation of the variance also uses the sums to avoid error.
-The formula is a derivation from the original sample variance formula, the steps can be seen on reference[2].
+The formula is a derivation from the original sample variance formula, the steps can be 
+seen on reference[2].
 
-To keep track of the minimum and maximum values in the sample, we store them in variables _min and _max, and once the object is constructed or the method clear() is called, those values are set to numeric_limits<double>::min() and numeric_limits<double>::max(), setting those variables to minimum and maximum values a double variable could assume. We use this to make the first value inserted be the minimum and maximum value at the same time, initializing them and with no need of check if any value added later is the first value in the sample everytime the function addValue() is called.
+To keep track of the minimum and maximum values in the sample, we store them in variables 
+_min and _max, and once the object is constructed or the method clear() is called, those 
+values are set to numeric_limits<double>::min() and numeric_limits<double>::max(), setting 
+those variables to minimum and maximum values a double variable could assume. We use this to 
+make the first value inserted be the minimum and maximum value at the same time, initializing 
+them and with no need of check if any value added later is the first value in the sample 
+everytime the function addValue() is called.
 
-The coefficient of variation is calculated following the reference[3], with a simple division of the standard of deviation by the sample mean.
+The coefficient of variation is calculated following the reference[3], with a simple division 
+of the standard of deviation by the sample mean.
 
 
 
