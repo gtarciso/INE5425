@@ -86,6 +86,27 @@ everytime the function addValue() is called.
 The coefficient of variation is calculated following the reference[3], with a simple division 
 of the standard of deviation by the sample mean.
 
+To find the half width confidence interval and the new sample size, we need to find the 
+respective z-score with a given probability, in a density function. Once we are not using none
+library to integrate, and neither to generate the t stundent distibution, as we combined in a 
+reunion with the professor, we are using the normal distribution.
+Knowing the probability density function of a normal distribution, with standard deviation σ,
+the error function erf(a/(σ*sqrt(2))) is the probability of a value lies between -a and +a.
+The method showed before is used only to get, in a formula, the probability given a z-score, 
+but what we need is the opposite, we need to get the z-score from a given probability, and the 
+way we found to get this value is using the inverse of the error function, in the probit
+function, according to reference[5].
+Probit function:
+inverse_density_function(probability) = sqrt(2) * inverse_error_function(2*probability - 1).
+The algorithm used to get the density function uses this idea. We use the algorithm from
+reference[4], which uses a numeric method to integrate the normal distribution.
+The relation between the inverse_density_function(probability) and the integral of the normal
+distribution is:
+inverse_density_function(p) = zp, 
+density_function(zp) is equivalent to the integral of the normal distribution
+integral of normal distribution:
+integrate from -infinite to zp {1/sqrt(2pi)*exp(-x²/2) dx}
+
 
 
 References:
@@ -94,5 +115,6 @@ References:
 [3] - https://pt.wikipedia.org/wiki/Coeficiente_de_varia%C3%A7%C3%A3o
 [4] - http://csg.sph.umich.edu/abecasis/gas_power_calculator/algorithm-as-241-the-percentage-points-of-the-normal-distribution.pdf
 [5] - https://en.wikipedia.org/wiki/Normal_distribution#Quantile_function
+[6] - https://en.wikipedia.org/wiki/Error_function
 
 
